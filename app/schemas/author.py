@@ -10,3 +10,5 @@ class Author(Base, BaseEntity):
     id = Column(Uuid, primary_key=True, default=uuid.uuid4)
     full_name = Column(String)
     gender = Column(Enum(Gender), nullable=False, default=Gender.NONE)
+
+    books = relationship("Book", back_populates="author")

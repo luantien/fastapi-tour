@@ -4,6 +4,14 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 
+
+def get_db_context():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+
 def get_connection_string():
     load_dotenv()
     engine = os.environ.get("DB_ENGINE")

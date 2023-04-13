@@ -31,7 +31,7 @@ def upgrade() -> None:
     )
     op.create_index("idx_usr_fst_lst_name", "users", ["first_name", "last_name"])
     # Update Book Table
-    op.add_column("books", sa.Column("owner_id", sa.UUID, nullable=False))
+    op.add_column("books", sa.Column("owner_id", sa.UUID, nullable=True))
     op.create_foreign_key("fk_book_owner", "books", "users", ["owner_id"],['id'])
 
 

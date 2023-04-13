@@ -4,9 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 
-load_dotenv()
-
 def get_connection_string():
+    load_dotenv()
     engine = os.environ.get("DB_ENGINE")
     dbhost = os.environ.get("DB_HOST")
     username = os.environ.get("DB_USERNAME")

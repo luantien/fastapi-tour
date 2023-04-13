@@ -2,7 +2,7 @@ import enum
 import uuid
 from sqlalchemy import Column, ForeignKey, SmallInteger, String, Uuid, Enum, Table
 from sqlalchemy.orm import relationship
-from database import Base, metadata
+from database import Base
 from .base_entity import BaseEntity
 
 
@@ -20,4 +20,4 @@ class Book(Base, BaseEntity):
     rating = Column(SmallInteger, nullable=False, default=0)
     author_id = Column(Uuid, ForeignKey("authors.id"), nullable=False)
 
-    author = relationship("Author", back_populates="books")
+    author = relationship("Author")

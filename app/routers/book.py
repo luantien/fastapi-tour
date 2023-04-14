@@ -13,24 +13,29 @@ router = APIRouter(prefix="/books", tags=["Book"])
 
 @router.get("")
 async def get_all_books(
-    title: str = Query(default=None),
-    author_id: UUID = Query(default=None),
-    page: int = Query(ge=1, default=1),
-    size: int = Query(ge=1, le=50, default=10),
-    user: User = Depends(token_interceptor),
-    db: Session = Depends(get_db_context)
-    )-> List[BookViewModel]:
-        # Default of joinedload is LEFT OUTER JOIN
-        query = db.query(Book).options(
-            joinedload(Book.author, innerjoin=True),
-            joinedload(Book.owner))
+        title: str = Query(default=None),
+        author_id: UUID = Query(default=None),
+        page: int = Query(ge=1, default=1),
+        size: int = Query(ge=1, le=50, default=10),
+        user: User = Depends(token_interceptor),
+        db: Session = Depends(get_db_context)
+        )-> List[BookViewModel]:
+    if not user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied")
 
-        if title is not None:
-            query = query.filter(Book.title.like(f"{title}%"))
-        if author_id is not None:
-            query = query.filter(Book.author_id == author_id)
-        
-        return query.offset((page-1)*size).limit(size).all()
+    # Default of joinedload is LEFT OUTER JOIN
+    query = db.query(Book).options(
+        joinedload(Book.author, innerjoin=True),
+        joinedload(Book.owner))
+
+    if title is not None:
+        query = query.filter(Book.title.like(f"{title}%"))
+    if author_id is not None:
+        query = query.filter(Book.author_id == author_id)
+    
+    return query.offset((page-1)*size).limit(size).all()
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def create_book(request: BookModel, 
@@ -42,6 +47,7 @@ async def create_book(request: BookModel,
     
     new_book = Book(**request.dict())
     new_book.created_at = datetime.utcnow()
+    new_book.owner_id = user.id
 
     db.add(new_book)
     db.commit()

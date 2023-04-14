@@ -3,7 +3,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-from models import AuthorViewModel
+from models import AuthorViewModel, UserBaseModel
 from schemas import BookMode
 
 
@@ -27,6 +27,8 @@ class BookViewModel(BaseModel):
     rating: int
     author_id: UUID
     author: AuthorViewModel
+    owner_id: UUID | None = None
+    owner: UserBaseModel | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
     

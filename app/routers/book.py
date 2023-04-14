@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import List
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, Query
-from starlette import status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session, joinedload
+from services.auth import token_interceptor
 from database import get_db_context
 
-from schemas import Author, Book
+from schemas import Author, Book, User
 from models import BookModel, BookViewModel
 
 router = APIRouter(prefix="/books", tags=["Book"])
@@ -17,10 +17,13 @@ async def get_all_books(
     author_id: UUID = Query(default=None),
     page: int = Query(ge=1, default=1),
     size: int = Query(ge=1, le=50, default=10),
+    user: User = Depends(token_interceptor),
     db: Session = Depends(get_db_context)
     )-> List[BookViewModel]:
         # Default of joinedload is LEFT OUTER JOIN
-        query = db.query(Book).options(joinedload(Book.author, innerjoin=True))
+        query = db.query(Book).options(
+            joinedload(Book.author, innerjoin=True),
+            joinedload(Book.owner))
 
         if title is not None:
             query = query.filter(Book.title.like(f"{title}%"))
@@ -30,10 +33,12 @@ async def get_all_books(
         return query.offset((page-1)*size).limit(size).all()
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_book(request: BookModel, db: Session=Depends(get_db_context)) -> BookViewModel:
+async def create_book(request: BookModel, 
+        user: User = Depends(token_interceptor),
+        db: Session=Depends(get_db_context)) -> BookViewModel:
     author = db.query(Author).filter(Author.id == request.author_id).first()
     if author is None:
-          raise HTTPException(status_code=422, detail="Invalid author information")
+        raise HTTPException(status_code=422, detail="Invalid author information")
     
     new_book = Book(**request.dict())
     new_book.created_at = datetime.utcnow()

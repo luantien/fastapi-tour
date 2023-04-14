@@ -9,7 +9,7 @@ from uuid import uuid4
 from datetime import datetime
 from alembic import op
 import sqlalchemy as sa
-from models import get_password_hash
+from schemas.user import get_password_hash
 from settings import ADMIN_DEFAULT_PASSWORD
 
 # revision identifiers, used by Alembic.

@@ -18,5 +18,7 @@ class Book(Base, BaseEntity):
     mode = Column(Enum(BookMode), nullable=False, default=BookMode.DRAFT)
     rating = Column(SmallInteger, nullable=False, default=0)
     author_id = Column(Uuid, ForeignKey("authors.id"), nullable=False)
+    owner_id = Column(Uuid, ForeignKey("users.id"), nullable=True)
 
     author = relationship("Author")
+    owner = relationship("User")

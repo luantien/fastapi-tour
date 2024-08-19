@@ -6,9 +6,10 @@ Create Date: 2023-04-13 10:01:32.392241
 
 """
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, timezone
 from alembic import op
 import sqlalchemy as sa
+
 from schemas.user import get_password_hash
 from settings import ADMIN_DEFAULT_PASSWORD
 
@@ -50,8 +51,8 @@ def upgrade() -> None:
             "last_name": "Admin",
             "is_active": True,
             "is_admin": True,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
         }
     ])
 

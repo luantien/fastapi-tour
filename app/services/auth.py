@@ -1,11 +1,13 @@
-from datetime import timedelta, datetime
+from datetime import timedelta
 from typing import Optional
 from uuid import UUID
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from services.utils import get_current_utc_time
 from settings import JWT_SECRET, JWT_ALGORITHM
 from schemas import User, verify_password
 
@@ -19,12 +21,12 @@ def create_access_token(user: User, expires: Optional[timedelta] = None):
         "last_name": user.last_name,
         "is_admin": user.is_admin
     }
-    expire = datetime.utcnow() + expires if expires else datetime.utcnow() + timedelta(minutes=5)
+    expire = get_current_utc_time() + expires if expires else get_current_utc_time() + timedelta(minutes=10)
     claims.update({"exp": expire})
     return jwt.encode(claims, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 def authenticate_user(username: str, password: str, db: Session):
-    user = db.query(User).filter(User.username == username).first()
+    user = db.scalars(select(User).filter(User.username == username)).first()
 
     if not user:
         return False

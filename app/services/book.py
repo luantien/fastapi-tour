@@ -1,5 +1,6 @@
 from typing import List
 from uuid import UUID
+from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 from schemas import Book
 from models.book import BookModel, SearchBookModel
@@ -10,7 +11,7 @@ from services.exception import ResourceNotFoundError, InvalidInputError
 
 def get_books(db: Session, conds: SearchBookModel) -> List[Book]:
     # Default of joinedload is LEFT OUTER JOIN
-    query = db.query(Book).options(
+    query = select(Book).options(
         joinedload(Book.author, innerjoin=True),
         joinedload(Book.owner))
     
@@ -19,16 +20,18 @@ def get_books(db: Session, conds: SearchBookModel) -> List[Book]:
     if conds.author_id is not None:
         query = query.filter(Book.author_id == conds.author_id)
     
-    return query.offset((conds.page-1)*conds.size).limit(conds.size).all()
+    query.offset((conds.page-1)*conds.size).limit(conds.size)
+    
+    return db.scalars(query).all()
 
 
 def get_book_by_id(db: Session, id: UUID, /, joined_load = False) -> Book:
-    query = db.query(Book).filter(Book.id == id)
+    query = select(Book).filter(Book.id == id)
     
     if joined_load:
         query.options(joinedload(Book.author, innerjoin=True))
     
-    return query.first()
+    return db.scalars(query).first()
     
 
 def add_new_book(db: Session, data: BookModel) -> Book:

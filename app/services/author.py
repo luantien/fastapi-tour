@@ -9,12 +9,12 @@ from services.exception import ResourceNotFoundError
 
 
 async def get_authors(async_db: AsyncSession) -> list[Author]:
-    authors = await async_db.execute(select(Author).order_by(Author.created_at))
+    result = await async_db.scalars(select(Author).order_by(Author.created_at))
     
-    return authors.scalars().all()
+    return result.all()
 
 def get_author_by_id(db: Session, author_id: UUID) -> Author:
-    return db.query(Author).filter(Author.id == author_id).first()
+    return db.scalars(select(Author).filter(Author.id == author_id)).first()
 
 def add_new_author(db: Session, data: AuthorModel) -> Author:
     author = Author(**data.model_dump())

@@ -10,7 +10,7 @@ class BookMode(enum.Enum):
     PUBLISHED = 'P'
 
 
-class Book(Base, BaseEntity):
+class Book(BaseEntity, Base):
     __tablename__ = "books"
 
     title = Column(String)

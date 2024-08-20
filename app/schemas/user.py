@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])
 
-class User(Base, BaseEntity):
+class User(BaseEntity, Base):
     __tablename__ = "users"
 
     email = Column(String, unique=True, index=True)

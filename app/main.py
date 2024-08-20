@@ -9,6 +9,6 @@ app.include_router(book.router)
 app.include_router(user.router)
 app.include_router(auth.router)
 
-@app.get("/")
+@app.get("/", tags=["Health Check"])
 async def health_check():
     return "API Service is up and running!"

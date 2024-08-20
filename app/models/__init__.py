@@ -1,3 +1,3 @@
-from .author import *
-from .user import *
-from .book import *
+from models.author import *
+from models.user import *
+from models.book import *

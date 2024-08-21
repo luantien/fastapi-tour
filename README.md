@@ -1,5 +1,5 @@
-# fastapi-tour
-A fast tour to learn how to use FastAPI with SQLAlchemy and PostGreSQL
+# FastAPI Tour
+A FastAPI sample application to learn how to use FastAPI with SQLAlchemy and PostGreSQL.
 
 # Sample Setup 
 - Create a virtual environment using `virtualenv` module in python.

@@ -1,14 +1,16 @@
-import enum
 from sqlalchemy import Column, ForeignKey, SmallInteger, String, Uuid, Enum
 from sqlalchemy.orm import relationship
 from database import Base
 from .base_entity import BaseEntity
 
 
-class BookMode(enum.Enum):
+class BookMode(Enum):
     DRAFT = 'D'
     PUBLISHED = 'P'
 
+class OwnerSource(Enum):
+    COGNITO = 'COGNITO'
+    LOCAL = 'LOCAL'
 
 class Book(BaseEntity, Base):
     __tablename__ = "books"
@@ -18,7 +20,6 @@ class Book(BaseEntity, Base):
     mode = Column(Enum(BookMode), nullable=False, default=BookMode.DRAFT)
     rating = Column(SmallInteger, nullable=False, default=0)
     author_id = Column(Uuid, ForeignKey("authors.id"), nullable=False)
-    owner_id = Column(Uuid, ForeignKey("users.id"), nullable=True)
+    owner_id = Column(Uuid, nullable=True)
 
     author = relationship("Author")
-    owner = relationship("User")

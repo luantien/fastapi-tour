@@ -10,6 +10,10 @@ class UnAuthorizedError(HTTPException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized access")
 
+class InvalidTokenError(HTTPException):
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
 class AccessDeniedError(HTTPException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")

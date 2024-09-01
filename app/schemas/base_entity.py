@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Uuid, Time
-import enum
+from enum import Enum
 import uuid
 
-class Gender(enum.Enum):
+class Gender(Enum):
     NONE = 'N'
     FEMALE = 'F'
     MALE = 'M'

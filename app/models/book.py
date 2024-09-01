@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 from models import AuthorViewModel, UserBaseModel
-from schemas import BookMode
+from schemas.book import BookMode
 
 
 class SearchBookModel():
@@ -41,7 +41,6 @@ class BookViewModel(BaseModel):
     author_id: UUID
     author: AuthorViewModel
     owner_id: UUID | None = None
-    owner: UserBaseModel | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
     

@@ -31,8 +31,10 @@ def upgrade() -> None:
         sa.Column('updated_at', sa.DateTime),
     )
     op.create_foreign_key('fk_book_author', 'books', 'authors', ['author_id'], ['id'])
+    op.create_index("idx_owner_id", "books", ["owner_id"])
 
 
 def downgrade() -> None:
     op.drop_table('books')
     op.execute("DROP TYPE bookmode;")
+    op.execute("DROP TYPE ownersource;")

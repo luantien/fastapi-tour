@@ -5,6 +5,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# API Service Security Setting
+COGNITO = {
+    "ENABLED": os.environ.get("COGNITO_ENABLED").lower() == 'true',
+    "HOST": os.environ.get("COGNITO_HOST"),
+    "CLIENT_ID": os.environ.get("COGNITO_CLIENT_ID"),
+    "CLIENT_SECRET": os.environ.get("COGNITO_CLIENT_SECRET"),
+    "JWKS_URL": os.environ.get("COGNITO_JWKS_URL"),
+}
+
+JWT_SECRET = os.environ.get("JWT_SECRET")
+JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM")
+
+
+# Database Setting
 def get_connection_string(asyncMode: bool = False) -> str:
     """Get the connection string for the database
 
@@ -18,12 +32,9 @@ def get_connection_string(asyncMode: bool = False) -> str:
     dbname = os.environ.get("DB_NAME")
     return f"{engine}://{username}:{password}@{dbhost}/{dbname}"
 
-# Database Setting
 SQLALCHEMY_DATABASE_URL = get_connection_string()
 SQLALCHEMY_DATABASE_URL_ASYNC = get_connection_string(asyncMode=True)
 
-ADMIN_DEFAULT_PASSWORD = os.environ.get("DEFAULT_PASSWORD")
 
-# JWT Setting
-JWT_SECRET = os.environ.get("JWT_SECRET")
-JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM")
+# Other Settings
+ADMIN_DEFAULT_PASSWORD = os.environ.get("DEFAULT_PASSWORD")

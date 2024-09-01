@@ -7,7 +7,7 @@ Create Date: 2023-04-11 18:16:30.456110
 """
 from alembic import op
 import sqlalchemy as sa
-from schemas.book import BookMode
+from schemas.book import BookMode, OwnerSource
 
 # revision identifiers, used by Alembic.
 revision = '298754da4bd0'
@@ -25,12 +25,16 @@ def upgrade() -> None:
         sa.Column('mode', sa.Enum(BookMode), nullable=False, default=BookMode.DRAFT),
         sa.Column('rating', sa.SmallInteger, default=0),
         sa.Column('author_id', sa.UUID, nullable=False),
+        sa.Column('owner_id', sa.UUID, nullable=False),
+        sa.Column("owner_source", sa.Enum(OwnerSource), nullable=True),
         sa.Column('created_at', sa.DateTime),
-        sa.Column('updated_at', sa.DateTime)
+        sa.Column('updated_at', sa.DateTime),
     )
     op.create_foreign_key('fk_book_author', 'books', 'authors', ['author_id'], ['id'])
+    op.create_index("idx_owner_id", "books", ["owner_id"])
 
 
 def downgrade() -> None:
     op.drop_table('books')
     op.execute("DROP TYPE bookmode;")
+    op.execute("DROP TYPE ownersource;")

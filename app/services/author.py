@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from services import utils
 from models import AuthorModel
-from schemas import Author
+from schemas.author import Author
 from services.exception import ResourceNotFoundError
 
 

@@ -4,11 +4,11 @@ from fastapi import APIRouter, status, Depends, Query
 from sqlalchemy.orm import Session
 
 from database import get_db_context
+from models.user import UserClaims
 from services import book as BookService
-from services import auth as AuthService
 from services.exception import *
-from schemas import User
 from models import BookModel, BookViewModel, SearchBookModel
+from services.auth import authorizer
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
@@ -22,24 +22,21 @@ async def get_all_books(
     page: int = Query(ge=1, default=1),
     size: int = Query(ge=1, le=50, default=10),
     db: Session = Depends(get_db_context),
-    user: User = Depends(AuthService.token_interceptor),
+    user: UserClaims = Depends(authorizer),
     ):
-        if not user.is_admin:
-            raise AccessDeniedError()
-
         conds = SearchBookModel(title, author_id, page, size)
         return BookService.get_books(db, conds)
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=BookViewModel)
 async def create_book(
     request: BookModel, 
-    user: User = Depends(AuthService.token_interceptor),
     db: Session = Depends(get_db_context),
-    ):
-        if not user:
+    user: UserClaims = Depends(authorizer),
+    ):  
+        if not user.is_staff:
             raise AccessDeniedError()
-        
-        request.owner_id = user.id
+
+        request.owner_id = UUID(user.sub)
 
         return BookService.add_new_book(db, request)
 

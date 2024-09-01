@@ -2,7 +2,7 @@ from typing import List
 from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
-from schemas import Book
+from schemas.book import Book
 from models.book import BookModel, SearchBookModel
 from services import author as AuthorService
 from services.utils import get_current_utc_time
@@ -12,8 +12,7 @@ from services.exception import ResourceNotFoundError, InvalidInputError
 def get_books(db: Session, conds: SearchBookModel) -> List[Book]:
     # Default of joinedload is LEFT OUTER JOIN
     query = select(Book).options(
-        joinedload(Book.author, innerjoin=True),
-        joinedload(Book.owner))
+        joinedload(Book.author, innerjoin=True))
     
     if conds.title is not None:
         query = query.filter(Book.title.like(f"{conds.title}%"))

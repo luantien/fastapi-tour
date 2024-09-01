@@ -10,11 +10,11 @@ class User(BaseEntity, Base):
 
     email = Column(String, unique=True, index=True)
     username = Column(String, unique=True, index=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
+    given_name = Column(String, nullable=False)
+    family_name = Column(String, nullable=False)
     password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
-    is_admin = Column(Boolean, default=False)
+    is_staff = Column(Boolean, default=False)
 
 
 def get_password_hash(password):

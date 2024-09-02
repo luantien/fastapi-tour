@@ -5,10 +5,11 @@ from sqlalchemy.orm import Session
 
 from database import get_db_context
 from models.user import UserClaims
+from schemas.book import OwnerSource
 from services import book as BookService
 from services.exception import *
 from models import BookModel, BookViewModel, SearchBookModel
-from services.auth import authorizer
+from services.auth import CognitoAuthorizer, authorizer
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
@@ -37,6 +38,8 @@ async def create_book(
             raise AccessDeniedError()
 
         request.owner_id = UUID(user.sub)
+        if (isinstance(authorizer, CognitoAuthorizer)):
+            request.owner_source = OwnerSource.COGNITO
 
         return BookService.add_new_book(db, request)
 

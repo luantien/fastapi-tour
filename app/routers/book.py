@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db_context
 from models.user import UserClaims
-from schemas.book import OwnerSource
+from entities.book import OwnerSource
 from services import book as BookService
 from services.exception import *
 from models import BookModel, BookViewModel, SearchBookModel

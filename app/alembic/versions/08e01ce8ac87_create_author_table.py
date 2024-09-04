@@ -7,7 +7,7 @@ Create Date: 2023-04-11 16:08:31.435890
 """
 from alembic import op
 import sqlalchemy as sa
-from schemas.base_entity import Gender
+from entities.base_entity import Gender
 
 
 # revision identifiers, used by Alembic.

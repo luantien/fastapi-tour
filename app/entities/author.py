@@ -2,7 +2,7 @@ import uuid
 from database import Base
 from sqlalchemy import Column, String, Uuid, Enum
 from sqlalchemy.orm import relationship
-from schemas.base_entity import BaseEntity, Gender
+from entities.base_entity import BaseEntity, Gender
 
 class Author(BaseEntity, Base):
     __tablename__ = "authors"

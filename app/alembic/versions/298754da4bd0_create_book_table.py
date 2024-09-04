@@ -7,7 +7,7 @@ Create Date: 2023-04-11 18:16:30.456110
 """
 from alembic import op
 import sqlalchemy as sa
-from schemas.book import BookMode, OwnerSource
+from entities.book import BookMode, OwnerSource
 
 # revision identifiers, used by Alembic.
 revision = '298754da4bd0'

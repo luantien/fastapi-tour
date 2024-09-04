@@ -10,8 +10,8 @@ from datetime import datetime, timezone
 from alembic import op
 import sqlalchemy as sa
 
-from schemas.book import OwnerSource
-from schemas.user import get_password_hash
+from entities.book import OwnerSource
+from entities.user import get_password_hash
 from settings import ADMIN_DEFAULT_PASSWORD
 
 # revision identifiers, used by Alembic.

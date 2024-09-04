@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 from models import AuthorViewModel, UserBaseModel
-from schemas.book import BookMode, OwnerSource
+from entities.book import BookMode, OwnerSource
 
 
 class SearchBookModel():

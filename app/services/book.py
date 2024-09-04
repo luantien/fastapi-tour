@@ -2,7 +2,7 @@ from typing import List
 from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
-from schemas.book import Book
+from entities.book import Book
 from models.book import BookModel, SearchBookModel
 from services import author as AuthorService
 from services.utils import get_current_utc_time

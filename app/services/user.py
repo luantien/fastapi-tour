@@ -5,7 +5,7 @@ import jwt
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from models.user import UserClaims
-from schemas.user import User, verify_password
+from entities.user import User, verify_password
 from services.utils import get_current_timestamp
 from settings import JWT_ALGORITHM, JWT_SECRET
 

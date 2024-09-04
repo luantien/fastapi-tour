@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, String
 from database import Base
-from schemas.base_entity import BaseEntity
+from entities.base_entity import BaseEntity
 from passlib.context import CryptContext
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])

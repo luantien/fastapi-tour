@@ -2,7 +2,7 @@ import enum
 from database import Base
 from sqlalchemy import Column, ForeignKey, SmallInteger, String, Uuid, Enum
 from sqlalchemy.orm import relationship
-from schemas.base_entity import BaseEntity
+from entities.base_entity import BaseEntity
 
 
 class BookMode(enum.Enum):

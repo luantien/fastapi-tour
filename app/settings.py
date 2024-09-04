@@ -7,7 +7,7 @@ load_dotenv()
 
 # API Service Security Setting
 COGNITO = {
-    "ENABLED": os.environ.get("COGNITO_ENABLED").lower() == 'true',
+    "ENABLED": os.environ.get("COGNITO_ENABLED", "").lower() == 'true',
     "HOST": os.environ.get("COGNITO_HOST"),
     "CLIENT_ID": os.environ.get("COGNITO_CLIENT_ID"),
     "CLIENT_SECRET": os.environ.get("COGNITO_CLIENT_SECRET"),
